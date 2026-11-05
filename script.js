@@ -28,8 +28,6 @@ document.addEventListener('keydown', event => { if (event.key === 'Escape' && na
 if ('IntersectionObserver' in window) {
   const reveals = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); reveals.unobserve(entry.target); } }), { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => reveals.observe(el));
-  const sections = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) navigation.querySelectorAll('a').forEach(a => { const active = a.hash === `#${entry.target.id}`; a.classList.toggle('active', active); if (active) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); }); }), { rootMargin: '-15% 0px -50% 0px' });
-  document.querySelectorAll('main section[id]').forEach(el => sections.observe(el));
 } else document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
 
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -53,9 +51,15 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
 }));
 const form = document.querySelector('#contact-form');
 const status = document.querySelector('.form-status');
-if (BUSINESS.formEndpoint) status.textContent = 'Your enquiry will be sent securely to our contact service.';
-document.querySelectorAll('[data-product]').forEach(a => a.addEventListener('click', () => { form.elements.subject.value = 'Product enquiry'; form.elements.message.value = `Hello, I would like to know more about ${a.dataset.product}.`; }));
-form.addEventListener('submit', async event => {
+if (form && BUSINESS.formEndpoint) status.textContent = 'Your enquiry will be sent securely to our contact service.';
+if (form) {
+  const product = new URLSearchParams(window.location.search).get('product');
+  if (product) {
+    form.elements.subject.value = 'Product enquiry';
+    form.elements.message.value = `Hello, I would like to know more about ${product.slice(0, 200)}.`;
+  }
+}
+form?.addEventListener('submit', async event => {
   event.preventDefault();
   if (!form.reportValidity()) return;
   const data = Object.fromEntries(new FormData(form));

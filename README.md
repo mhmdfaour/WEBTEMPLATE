@@ -10,7 +10,7 @@ From this directory:
 python3 -m http.server 8000 --bind 0.0.0.0
 ```
 
-Open the site in your local browser. Deploy this directory to any static host (GitHub Pages, Netlify, Cloudflare Pages, etc.). `index.html` is the entry point. No npm installation is needed.
+Open the site in your local browser. Deploy this directory to any static host (GitHub Pages, Netlify, Cloudflare Pages, etc.). `index.html` is Home; `catalogue.html`, `about.html`, and `contact.html` are separate pages. Navigation works as normal file links, including when opened directly from your computer. No npm installation is needed.
 
 ## Make it yours
 
